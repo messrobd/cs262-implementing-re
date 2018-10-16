@@ -26,3 +26,11 @@ def p_regexp_ch(p):
 def p_regexp_multiplier(p):
     'regexp : regexp MULTIPLIER'
     p[0] = ('multiplier', p[1])
+
+def p_regexp_disjunction(p):
+    'regexp : regexp DISJUNCTION regexp'
+    p[0] = ('disjunction', p[1], p[3])
+
+def p_regexp_group(p):
+    'regexp : LPAREN regexp RPAREN'
+    p[0] = ('group', p[2])

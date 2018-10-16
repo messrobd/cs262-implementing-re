@@ -1,11 +1,5 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    RPAREN
-    LPAREN
-    DISJUNCTION
-
 Grammar
 
 Rule 0     S' -> expression
@@ -13,20 +7,22 @@ Rule 1     expression -> regexp expression
 Rule 2     expression -> regexp
 Rule 3     regexp -> CHARACTER
 Rule 4     regexp -> regexp MULTIPLIER
+Rule 5     regexp -> regexp DISJUNCTION regexp
+Rule 6     regexp -> LPAREN regexp RPAREN
 
 Terminals, with rules where they appear
 
 CHARACTER            : 3
-DISJUNCTION          : 
-LPAREN               : 
+DISJUNCTION          : 5
+LPAREN               : 6
 MULTIPLIER           : 4
-RPAREN               : 
+RPAREN               : 6
 error                : 
 
 Nonterminals, with rules where they appear
 
 expression           : 1 0
-regexp               : 1 2 4
+regexp               : 1 2 4 5 5 6
 
 Parsing method: LALR
 
@@ -37,56 +33,143 @@ state 0
     (2) expression -> . regexp
     (3) regexp -> . CHARACTER
     (4) regexp -> . regexp MULTIPLIER
+    (5) regexp -> . regexp DISJUNCTION regexp
+    (6) regexp -> . LPAREN regexp RPAREN
 
-    CHARACTER       shift and go to state 2
+    CHARACTER       shift and go to state 1
+    LPAREN          shift and go to state 2
 
-    regexp                         shift and go to state 1
-    expression                     shift and go to state 3
-
-state 1
-
-    (1) expression -> regexp . expression
-    (2) expression -> regexp .
-    (4) regexp -> regexp . MULTIPLIER
-    (1) expression -> . regexp expression
-    (2) expression -> . regexp
-    (3) regexp -> . CHARACTER
-    (4) regexp -> . regexp MULTIPLIER
-
-    $end            reduce using rule 2 (expression -> regexp .)
-    MULTIPLIER      shift and go to state 5
-    CHARACTER       shift and go to state 2
-
-    regexp                         shift and go to state 1
+    regexp                         shift and go to state 3
     expression                     shift and go to state 4
 
-state 2
+state 1
 
     (3) regexp -> CHARACTER .
 
     MULTIPLIER      reduce using rule 3 (regexp -> CHARACTER .)
+    DISJUNCTION     reduce using rule 3 (regexp -> CHARACTER .)
     CHARACTER       reduce using rule 3 (regexp -> CHARACTER .)
+    LPAREN          reduce using rule 3 (regexp -> CHARACTER .)
     $end            reduce using rule 3 (regexp -> CHARACTER .)
+    RPAREN          reduce using rule 3 (regexp -> CHARACTER .)
 
+
+state 2
+
+    (6) regexp -> LPAREN . regexp RPAREN
+    (3) regexp -> . CHARACTER
+    (4) regexp -> . regexp MULTIPLIER
+    (5) regexp -> . regexp DISJUNCTION regexp
+    (6) regexp -> . LPAREN regexp RPAREN
+
+    CHARACTER       shift and go to state 1
+    LPAREN          shift and go to state 2
+
+    regexp                         shift and go to state 5
 
 state 3
+
+    (1) expression -> regexp . expression
+    (2) expression -> regexp .
+    (4) regexp -> regexp . MULTIPLIER
+    (5) regexp -> regexp . DISJUNCTION regexp
+    (1) expression -> . regexp expression
+    (2) expression -> . regexp
+    (3) regexp -> . CHARACTER
+    (4) regexp -> . regexp MULTIPLIER
+    (5) regexp -> . regexp DISJUNCTION regexp
+    (6) regexp -> . LPAREN regexp RPAREN
+
+    $end            reduce using rule 2 (expression -> regexp .)
+    MULTIPLIER      shift and go to state 6
+    DISJUNCTION     shift and go to state 7
+    CHARACTER       shift and go to state 1
+    LPAREN          shift and go to state 2
+
+    regexp                         shift and go to state 3
+    expression                     shift and go to state 8
+
+state 4
 
     (0) S' -> expression .
 
 
 
-state 4
+state 5
+
+    (6) regexp -> LPAREN regexp . RPAREN
+    (4) regexp -> regexp . MULTIPLIER
+    (5) regexp -> regexp . DISJUNCTION regexp
+
+    RPAREN          shift and go to state 9
+    MULTIPLIER      shift and go to state 6
+    DISJUNCTION     shift and go to state 7
+
+
+state 6
+
+    (4) regexp -> regexp MULTIPLIER .
+
+    MULTIPLIER      reduce using rule 4 (regexp -> regexp MULTIPLIER .)
+    DISJUNCTION     reduce using rule 4 (regexp -> regexp MULTIPLIER .)
+    CHARACTER       reduce using rule 4 (regexp -> regexp MULTIPLIER .)
+    LPAREN          reduce using rule 4 (regexp -> regexp MULTIPLIER .)
+    $end            reduce using rule 4 (regexp -> regexp MULTIPLIER .)
+    RPAREN          reduce using rule 4 (regexp -> regexp MULTIPLIER .)
+
+
+state 7
+
+    (5) regexp -> regexp DISJUNCTION . regexp
+    (3) regexp -> . CHARACTER
+    (4) regexp -> . regexp MULTIPLIER
+    (5) regexp -> . regexp DISJUNCTION regexp
+    (6) regexp -> . LPAREN regexp RPAREN
+
+    CHARACTER       shift and go to state 1
+    LPAREN          shift and go to state 2
+
+    regexp                         shift and go to state 10
+
+state 8
 
     (1) expression -> regexp expression .
 
     $end            reduce using rule 1 (expression -> regexp expression .)
 
 
-state 5
+state 9
 
-    (4) regexp -> regexp MULTIPLIER .
+    (6) regexp -> LPAREN regexp RPAREN .
 
-    MULTIPLIER      reduce using rule 4 (regexp -> regexp MULTIPLIER .)
-    CHARACTER       reduce using rule 4 (regexp -> regexp MULTIPLIER .)
-    $end            reduce using rule 4 (regexp -> regexp MULTIPLIER .)
+    MULTIPLIER      reduce using rule 6 (regexp -> LPAREN regexp RPAREN .)
+    DISJUNCTION     reduce using rule 6 (regexp -> LPAREN regexp RPAREN .)
+    CHARACTER       reduce using rule 6 (regexp -> LPAREN regexp RPAREN .)
+    LPAREN          reduce using rule 6 (regexp -> LPAREN regexp RPAREN .)
+    $end            reduce using rule 6 (regexp -> LPAREN regexp RPAREN .)
+    RPAREN          reduce using rule 6 (regexp -> LPAREN regexp RPAREN .)
 
+
+state 10
+
+    (5) regexp -> regexp DISJUNCTION regexp .
+    (4) regexp -> regexp . MULTIPLIER
+    (5) regexp -> regexp . DISJUNCTION regexp
+
+  ! shift/reduce conflict for MULTIPLIER resolved as shift
+  ! shift/reduce conflict for DISJUNCTION resolved as shift
+    CHARACTER       reduce using rule 5 (regexp -> regexp DISJUNCTION regexp .)
+    LPAREN          reduce using rule 5 (regexp -> regexp DISJUNCTION regexp .)
+    $end            reduce using rule 5 (regexp -> regexp DISJUNCTION regexp .)
+    RPAREN          reduce using rule 5 (regexp -> regexp DISJUNCTION regexp .)
+    MULTIPLIER      shift and go to state 6
+    DISJUNCTION     shift and go to state 7
+
+  ! MULTIPLIER      [ reduce using rule 5 (regexp -> regexp DISJUNCTION regexp .) ]
+  ! DISJUNCTION     [ reduce using rule 5 (regexp -> regexp DISJUNCTION regexp .) ]
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for MULTIPLIER in state 10 resolved as shift
+WARNING: shift/reduce conflict for DISJUNCTION in state 10 resolved as shift

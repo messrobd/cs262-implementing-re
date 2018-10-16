@@ -56,12 +56,14 @@ rparen = r'\)'
 #print re.findall(rparen, r) == [')']
 print test_lexer(r)
 
-ab = 'ab'
 a_star = 'a*'
-a_or_b = 'a|b'
-a_or_b_star = '(a|b)*'
-
 print test_parser(a_star)
+
+a_or_b = 'a|b'
+print test_parser(a_or_b)
+
+a_or_b_star = '(a|b)*'
+print test_parser(a_or_b_star)
 
 a_b_star_c = 'a(b*)c'
 print test_lexer(a_b_star_c)

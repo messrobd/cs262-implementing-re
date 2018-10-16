@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'expressionCHARACTER DISJUNCTION LPAREN MULTIPLIER RPARENexpression : regexp expressionexpression : regexpregexp : CHARACTERregexp : regexp MULTIPLIER'
+_lr_signature = 'expressionCHARACTER DISJUNCTION LPAREN MULTIPLIER RPARENexpression : regexp expressionexpression : regexpregexp : CHARACTERregexp : regexp MULTIPLIERregexp : regexp DISJUNCTION regexpregexp : LPAREN regexp RPAREN'
     
-_lr_action_items = {'$end':([1,2,3,4,5,],[-2,-3,0,-1,-4,]),'CHARACTER':([0,1,2,5,],[2,2,-3,-4,]),'MULTIPLIER':([1,2,5,],[5,-3,-4,]),}
+_lr_action_items = {'RPAREN':([1,5,6,9,10,],[-3,9,-4,-6,-5,]),'CHARACTER':([0,1,2,3,6,7,9,10,],[1,-3,1,1,-4,1,-6,-5,]),'LPAREN':([0,1,2,3,6,7,9,10,],[2,-3,2,2,-4,2,-6,-5,]),'MULTIPLIER':([1,3,5,6,9,10,],[-3,6,6,-4,-6,6,]),'DISJUNCTION':([1,3,5,6,9,10,],[-3,7,7,-4,-6,7,]),'$end':([1,3,4,6,8,9,10,],[-3,-2,0,-4,-1,-6,-5,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'regexp':([0,1,],[1,1,]),'expression':([0,1,],[3,4,]),}
+_lr_goto_items = {'regexp':([0,2,3,7,],[3,5,3,10,]),'expression':([0,3,],[4,8,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -31,4 +31,6 @@ _lr_productions = [
   ('expression -> regexp','expression',1,'p_exp_last','re_parser.py',19),
   ('regexp -> CHARACTER','regexp',1,'p_regexp_ch','re_parser.py',23),
   ('regexp -> regexp MULTIPLIER','regexp',2,'p_regexp_multiplier','re_parser.py',27),
+  ('regexp -> regexp DISJUNCTION regexp','regexp',3,'p_regexp_disjunction','re_parser.py',31),
+  ('regexp -> LPAREN regexp RPAREN','regexp',3,'p_regexp_group','re_parser.py',35),
 ]
