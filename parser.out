@@ -1,0 +1,77 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    RPAREN
+    MULTIPLIER
+    LPAREN
+    DISJUNCTION
+
+Grammar
+
+Rule 0     S' -> regexp
+Rule 1     regexp -> regexp regexp
+Rule 2     regexp -> CHARACTER
+
+Terminals, with rules where they appear
+
+CHARACTER            : 2
+DISJUNCTION          : 
+LPAREN               : 
+MULTIPLIER           : 
+RPAREN               : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+regexp               : 1 1 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . regexp
+    (1) regexp -> . regexp regexp
+    (2) regexp -> . CHARACTER
+
+    CHARACTER       shift and go to state 2
+
+    regexp                         shift and go to state 1
+
+state 1
+
+    (0) S' -> regexp .
+    (1) regexp -> regexp . regexp
+    (1) regexp -> . regexp regexp
+    (2) regexp -> . CHARACTER
+
+    CHARACTER       shift and go to state 2
+
+    regexp                         shift and go to state 3
+
+state 2
+
+    (2) regexp -> CHARACTER .
+
+    CHARACTER       reduce using rule 2 (regexp -> CHARACTER .)
+    $end            reduce using rule 2 (regexp -> CHARACTER .)
+
+
+state 3
+
+    (1) regexp -> regexp regexp .
+    (1) regexp -> regexp . regexp
+    (1) regexp -> . regexp regexp
+    (2) regexp -> . CHARACTER
+
+  ! shift/reduce conflict for CHARACTER resolved as shift
+    $end            reduce using rule 1 (regexp -> regexp regexp .)
+    CHARACTER       shift and go to state 2
+
+  ! CHARACTER       [ reduce using rule 1 (regexp -> regexp regexp .) ]
+
+    regexp                         shift and go to state 3
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for CHARACTER in state 3 resolved as shift

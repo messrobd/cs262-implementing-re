@@ -1,5 +1,7 @@
 import ply.lex as lex
+import ply.yacc as yacc
 import re_lexer
+import re_parser
 import re
 
 def test_lexer(input_string):
@@ -11,7 +13,13 @@ def test_lexer(input_string):
     result = result + [tok.type, tok.value]
   return result
 
+def test_parser(input_string):
+    lexer.input(input_string)
+    parse_tree = parser.parse(input_string,lexer=lexer)
+    return parse_tree
+
 lexer = lex.lex(module=re_lexer)
+parser = yacc.yacc(module=re_parser)
 
 # character & operator regexps
 
@@ -24,10 +32,13 @@ pipe = '|'
 l = '('
 r = ')'
 
+print test_lexer(a)
+print test_parser(a)
+
 ch = r'[a-zA-Z0-9]'
 #print re.findall(ch, string) == ['a', 'B', '5']
-print test_lexer(a)
 print test_lexer(string)
+print test_parser(string)
 
 multiplier = r'\*'
 #print re.findall(multiplier, star) == ['*']
@@ -45,5 +56,10 @@ rparen = r'\)'
 #print re.findall(rparen, r) == [')']
 print test_lexer(r)
 
-simple_re = 'a(b*)c'
-print test_lexer(simple_re)
+ab = 'ab'
+a_star = 'a*'
+a_or_b = 'a|b'
+a_or_b_star = '(a|b)*'
+
+a_b_star_c = 'a(b*)c'
+print test_lexer(a_b_star_c)
