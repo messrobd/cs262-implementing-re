@@ -3,75 +3,90 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Unused terminals:
 
     RPAREN
-    MULTIPLIER
     LPAREN
     DISJUNCTION
 
 Grammar
 
-Rule 0     S' -> regexp
-Rule 1     regexp -> regexp regexp
-Rule 2     regexp -> CHARACTER
+Rule 0     S' -> expression
+Rule 1     expression -> regexp expression
+Rule 2     expression -> regexp
+Rule 3     regexp -> CHARACTER
+Rule 4     regexp -> regexp MULTIPLIER
 
 Terminals, with rules where they appear
 
-CHARACTER            : 2
+CHARACTER            : 3
 DISJUNCTION          : 
 LPAREN               : 
-MULTIPLIER           : 
+MULTIPLIER           : 4
 RPAREN               : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-regexp               : 1 1 0
+expression           : 1 0
+regexp               : 1 2 4
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . regexp
-    (1) regexp -> . regexp regexp
-    (2) regexp -> . CHARACTER
+    (0) S' -> . expression
+    (1) expression -> . regexp expression
+    (2) expression -> . regexp
+    (3) regexp -> . CHARACTER
+    (4) regexp -> . regexp MULTIPLIER
 
     CHARACTER       shift and go to state 2
 
     regexp                         shift and go to state 1
+    expression                     shift and go to state 3
 
 state 1
 
-    (0) S' -> regexp .
-    (1) regexp -> regexp . regexp
-    (1) regexp -> . regexp regexp
-    (2) regexp -> . CHARACTER
+    (1) expression -> regexp . expression
+    (2) expression -> regexp .
+    (4) regexp -> regexp . MULTIPLIER
+    (1) expression -> . regexp expression
+    (2) expression -> . regexp
+    (3) regexp -> . CHARACTER
+    (4) regexp -> . regexp MULTIPLIER
 
+    $end            reduce using rule 2 (expression -> regexp .)
+    MULTIPLIER      shift and go to state 5
     CHARACTER       shift and go to state 2
 
-    regexp                         shift and go to state 3
+    regexp                         shift and go to state 1
+    expression                     shift and go to state 4
 
 state 2
 
-    (2) regexp -> CHARACTER .
+    (3) regexp -> CHARACTER .
 
-    CHARACTER       reduce using rule 2 (regexp -> CHARACTER .)
-    $end            reduce using rule 2 (regexp -> CHARACTER .)
+    MULTIPLIER      reduce using rule 3 (regexp -> CHARACTER .)
+    CHARACTER       reduce using rule 3 (regexp -> CHARACTER .)
+    $end            reduce using rule 3 (regexp -> CHARACTER .)
 
 
 state 3
 
-    (1) regexp -> regexp regexp .
-    (1) regexp -> regexp . regexp
-    (1) regexp -> . regexp regexp
-    (2) regexp -> . CHARACTER
+    (0) S' -> expression .
 
-  ! shift/reduce conflict for CHARACTER resolved as shift
-    $end            reduce using rule 1 (regexp -> regexp regexp .)
-    CHARACTER       shift and go to state 2
 
-  ! CHARACTER       [ reduce using rule 1 (regexp -> regexp regexp .) ]
 
-    regexp                         shift and go to state 3
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: shift/reduce conflict for CHARACTER in state 3 resolved as shift
+state 4
+
+    (1) expression -> regexp expression .
+
+    $end            reduce using rule 1 (expression -> regexp expression .)
+
+
+state 5
+
+    (4) regexp -> regexp MULTIPLIER .
+
+    MULTIPLIER      reduce using rule 4 (regexp -> regexp MULTIPLIER .)
+    CHARACTER       reduce using rule 4 (regexp -> regexp MULTIPLIER .)
+    $end            reduce using rule 4 (regexp -> regexp MULTIPLIER .)
+

@@ -3,18 +3,26 @@ from re_lexer import tokens
 '''
 required grammar:
 
-regexp => CH regexp
+expression => regexp expression
 regexp => CH
 regexp => regexp *
 regexp => regexp | regexp
 regexp => ( regexp )                '''
 
-start = 'regexp'
+start = 'expression'
 
-def p_regexp(p):
-    'regexp : regexp regexp'
-    p[0] = p[1] + p[2]
+def p_exp(p):
+    'expression : regexp expression'
+    p[0] = [p[1]] + p[2]
+
+def p_exp_last(p):
+    'expression : regexp'
+    p[0] = [p[1]]
 
 def p_regexp_ch(p):
     'regexp : CHARACTER'
-    p[0] = [('character', p[1])]
+    p[0] = ('character', p[1])
+
+def p_regexp_multiplier(p):
+    'regexp : regexp MULTIPLIER'
+    p[0] = ('multiplier', p[1])

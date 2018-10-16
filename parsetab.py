@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'regexpCHARACTER DISJUNCTION LPAREN MULTIPLIER RPARENregexp : regexp regexpregexp : CHARACTER'
+_lr_signature = 'expressionCHARACTER DISJUNCTION LPAREN MULTIPLIER RPARENexpression : regexp expressionexpression : regexpregexp : CHARACTERregexp : regexp MULTIPLIER'
     
-_lr_action_items = {'CHARACTER':([0,1,2,3,],[2,2,-2,2,]),'$end':([1,2,3,],[0,-2,-1,]),}
+_lr_action_items = {'$end':([1,2,3,4,5,],[-2,-3,0,-1,-4,]),'CHARACTER':([0,1,2,5,],[2,2,-3,-4,]),'MULTIPLIER':([1,2,5,],[5,-3,-4,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'regexp':([0,1,3,],[1,3,3,]),}
+_lr_goto_items = {'regexp':([0,1,],[1,1,]),'expression':([0,1,],[3,4,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,7 +26,9 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> regexp","S'",1,None,None,None),
-  ('regexp -> regexp regexp','regexp',2,'p_regexp','re_parser.py',15),
-  ('regexp -> CHARACTER','regexp',1,'p_regexp_ch','re_parser.py',19),
+  ("S' -> expression","S'",1,None,None,None),
+  ('expression -> regexp expression','expression',2,'p_exp','re_parser.py',15),
+  ('expression -> regexp','expression',1,'p_exp_last','re_parser.py',19),
+  ('regexp -> CHARACTER','regexp',1,'p_regexp_ch','re_parser.py',23),
+  ('regexp -> regexp MULTIPLIER','regexp',2,'p_regexp_multiplier','re_parser.py',27),
 ]
