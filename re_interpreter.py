@@ -1,13 +1,10 @@
-def edge(ast, current_state):
-    re_type = ast[0]
-    if re_type == 'character':
-        return (current_state, ast[1]), current_state+1
-
-def interpret(ast):
+def interpret(ast, current_state=1):
     edges = {}
-    current_state = 1
     for ptree in ast:
-        key, value = edge(ptree, current_state)
-        edges[key] = value
-        current_state += 1
+        re_type = ptree[0]
+        if re_type == 'character':
+            edge = (current_state, ptree[1])
+            destination = current_state + 1
+            edges[edge] = destination
+            current_state = destination
     return edges

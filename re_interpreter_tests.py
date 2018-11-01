@@ -8,5 +8,9 @@ lexer = lex.lex(module=re_lexer)
 parser = yacc.yacc(module=re_parser)
 
 abc = 'abc'
-ast = parser.parse(abc,lexer=lexer)
+ast = parser.parse(abc, lexer=lexer)
 print interpret(ast)
+
+astar = 'a*'
+ast = parser.parse(astar, lexer=lexer)
+#print interpret(ast)
