@@ -4,10 +4,11 @@ from re_lexer import tokens
 required grammar:
 
 expression => regexp expression
+expression => regexp
 regexp => CH
-regexp => regexp *
-regexp => regexp | regexp
-regexp => ( regexp )                '''
+expression => expression *
+expression => expression | expression
+expression => ( expression )                '''
 
 start = 'expression'
 
@@ -24,13 +25,13 @@ def p_regexp_ch(p):
     p[0] = ('character', p[1])
 
 def p_regexp_multiplier(p):
-    'regexp : regexp MULTIPLIER'
+    'expression : expression MULTIPLIER'
     p[0] = ('multiplier', p[1])
 
 def p_regexp_disjunction(p):
-    'regexp : regexp DISJUNCTION regexp'
+    'expression : expression DISJUNCTION expression'
     p[0] = ('disjunction', p[1], p[3])
 
 def p_regexp_group(p):
-    'regexp : LPAREN regexp RPAREN'
+    'expression : LPAREN expression RPAREN'
     p[0] = ('group', p[2])

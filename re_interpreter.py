@@ -7,4 +7,7 @@ def interpret(ast, current_state=1):
             destination = current_state + 1
             edges[edge] = destination
             current_state = destination
+        elif re_type == 'multiplier':
+            new_edges = []
+            new_edges = None
     return edges

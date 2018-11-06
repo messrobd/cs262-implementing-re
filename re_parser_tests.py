@@ -67,3 +67,4 @@ print test_parser(a_or_b_star)
 
 a_b_star_c = 'a(b*)c'
 print test_lexer(a_b_star_c)
+print test_parser(a_b_star_c)
